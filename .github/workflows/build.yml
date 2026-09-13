@@ -11,26 +11,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Python 3.8
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.8'
-
-      - name: Verify Python version
-        run: |
-          python --version
-          which python
-
       - name: Install system dependencies
         run: |
           sudo apt update
-          sudo apt install -y git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake libffi-dev libssl-dev
+          sudo apt install -y git zip unzip openjdk-17-jdk python3-pip python3-venv autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake libffi-dev libssl-dev
 
-      - name: Install Buildozer
+      - name: Install Buildozer with pinned Cython
         run: |
-          pip install --upgrade "pip<24"
-          pip install "setuptools<60" "wheel<0.45" cython==0.29.36 virtualenv buildozer
-          python -c "import Cython; print('Cython:', Cython.__version__)"
+          pip install --user --upgrade "pip<24"
+          pip install --user "setuptools<60" "wheel<0.45" "cython==0.29.36" buildozer
+          python3 -c "import Cython; print('Cython:', Cython.__version__)"
 
       - name: Download Android NDK 25b
         run: |
@@ -39,15 +29,17 @@ jobs:
           wget -q https://dl.google.com/android/repository/android-ndk-r25b-linux.zip
           unzip -q android-ndk-r25b-linux.zip
           mv android-ndk-r25b android-ndk-r25b-custom
-          echo "NDK descargado correctamente"
 
       - name: Build with Buildozer
         env:
           ANDROID_NDK_HOME: /home/runner/.buildozer/android/platform/android-ndk-r25b-custom
           ANDROID_NDK_PATH: /home/runner/.buildozer/android/platform/android-ndk-r25b-custom
+          CYTHON_VERSION: 0.29.36
+          PIP_NO_BUILD_ISOLATION: 1
         run: |
-          which python
-          python --version
+          export PATH="$HOME/.local/bin:$PATH"
+          python3 --version
+          buildozer --version
           yes | buildozer -v android debug
 
       - name: Upload APK
