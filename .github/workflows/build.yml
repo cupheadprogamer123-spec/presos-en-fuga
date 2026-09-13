@@ -26,12 +26,25 @@ jobs:
           pip install --upgrade pip
           pip install "setuptools<70" wheel cython==0.29.36 buildozer
 
+      - name: Download Android NDK 25b
+        run: |
+          mkdir -p /home/runner/.buildozer/android/platform/
+          cd /home/runner/.buildozer/android/platform/
+          wget -q https://dl.google.com/android/repository/android-ndk-r25b-linux.zip
+          unzip -q android-ndk-r25b-linux.zip
+          mv android-ndk-r25b android-ndk-r25b-custom
+          echo "NDK descargado correctamente"
+
       - name: Build with Buildozer
+        env:
+          ANDROID_NDK_HOME: /home/runner/.buildozer/android/platform/android-ndk-r25b-custom
+          ANDROID_NDK_PATH: /home/runner/.buildozer/android/platform/android-ndk-r25b-custom
         run: |
           yes | buildozer -v android debug
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: presos-en-fuga-apk
           path: bin/*.apk
