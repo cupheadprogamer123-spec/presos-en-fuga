@@ -1,4 +1,4 @@
-name: Build APK
+name: name: Build APK
 
 on:
   push:
@@ -11,20 +11,25 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Python
+      - name: Set up Python 3.11
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
+      - name: Verify Python version
+        run: |
+          python --version
+          which python
+
       - name: Install system dependencies
         run: |
           sudo apt update
-          sudo apt install -y git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake libffi-dev libssl-dev
+          sudo apt install -y git zip unzip openjdk-17-jdk python3-pip python3.11-venv autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake libffi-dev libssl-dev
 
       - name: Install Buildozer
         run: |
           pip install --upgrade pip
-          pip install "setuptools<70" wheel cython==0.29.36 buildozer
+          pip install "setuptools<70" wheel cython==0.29.36 virtualenv buildozer
 
       - name: Download Android NDK 25b
         run: |
@@ -39,7 +44,10 @@ jobs:
         env:
           ANDROID_NDK_HOME: /home/runner/.buildozer/android/platform/android-ndk-r25b-custom
           ANDROID_NDK_PATH: /home/runner/.buildozer/android/platform/android-ndk-r25b-custom
+          PYTHON: /opt/hostedtoolcache/Python/3.11*/x64/bin/python
         run: |
+          which python
+          python --version
           yes | buildozer -v android debug
 
       - name: Upload APK
