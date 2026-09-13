@@ -23,7 +23,7 @@ android.archs = arm64-v8a, armeabi-v7a
 android.accept_sdk_license = True
 
 p4a.local_recipes =
-p4a.branch = develop
+p4a.branch = master
 p4a.extra_args = --cython=0.29.36
 p4a.fork = kivy
 
