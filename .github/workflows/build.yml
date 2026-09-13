@@ -28,8 +28,9 @@ jobs:
 
       - name: Install Buildozer
         run: |
-          pip install --upgrade pip
-          pip install "setuptools<70" wheel cython==0.29.36 virtualenv buildozer
+          pip install --upgrade "pip<24"
+          pip install "setuptools<70" "wheel<0.45" cython==0.29.36 virtualenv buildozer
+          python -c "import Cython; print('Cython:', Cython.__version__)"
 
       - name: Download Android NDK 25b
         run: |
