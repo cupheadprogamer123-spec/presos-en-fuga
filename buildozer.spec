@@ -8,7 +8,7 @@ source.include_exts = py,png,jpg,kv,atlas,wav,json
 
 version = 1.0.0
 
-requirements = python3,kivy
+requirements = python3,kivy==2.3.0,jnius==1.6.1
 
 orientation = portrait
 fullscreen = 1
@@ -21,6 +21,10 @@ android.ndk = 25b
 android.archs = arm64-v8a, armeabi-v7a
 
 android.accept_sdk_license = True
+
+p4a.local_recipes = 
+p4a.branch = master
+p4a.fork = kivy
 
 [buildozer]
 log_level = 2
