@@ -1,4 +1,4 @@
-name: name: Build APK
+name: Build APK
 
 on:
   push:
@@ -44,7 +44,6 @@ jobs:
         env:
           ANDROID_NDK_HOME: /home/runner/.buildozer/android/platform/android-ndk-r25b-custom
           ANDROID_NDK_PATH: /home/runner/.buildozer/android/platform/android-ndk-r25b-custom
-          PYTHON: /opt/hostedtoolcache/Python/3.11*/x64/bin/python
         run: |
           which python
           python --version
